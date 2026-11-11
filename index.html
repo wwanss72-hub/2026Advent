@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="대림절 묵상">
-<title>남학교회 대림절묵상</title>
+<title>남학교회 대림절 묵상</title>
 <style>
 :root{--bg:#f4f2f8;--card:#ffffff;--tx:#241c3d;--mut:#6d6585;--ac:#5a3d99;--ln:#ddd7ea;--flame:#e8a826;--wax:#efe8da;--p:#6b4aa8;--r:#d9799c;--c1:#4a2a8c;--c2:#a68be0;--c3:#e0589a;--c4:#f6bcd3;--c5:#fffaf0;
 box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
@@ -78,8 +78,6 @@ button{font:inherit;cursor:pointer}
 // ===== 설정 =====
 const START = new Date(2026, 10, 29); // 2026-11-29 (대림절 첫째 주일)
 const WEEKS = [["첫째 주","소망"],["둘째 주","평화"],["셋째 주","기쁨"],["넷째 주","사랑"]];
-// [본문, 원어 한 단어, 묵상 한 줄, 질문, (선택) 본문 전체 t]
-// t 칸에 사용 허가를 받은 번역본의 본문을 붙여 넣으면 화면에 표시됩니다.
 const D = [
 ["이사야 2:1–5","","산이 높아지는 날, 모든 민족이 ‘올라간다’. 대림은 올라가서 그분의 길을 배우는 계절입니다.","오늘 내가 배우고 싶은 ‘그분의 길’ 한 가지는?","가지는?","1 아모스의 아들 이사야가 받은 바 유다와 예루살렘에 관한 말씀이라 2 말일에 여호와의 전의 산이 모든 산 꼭대기에 굳게 설 것이요 모든 작은 산 위에 뛰어나리니 만방이 그리로 모여들 것이라 3 많은 백성이 가며 이르기를 오라 우리가 여호와의 산에 오르며 야곱의 하나님의 전에 이르자 그가 그의 길을 우리에게 가르치실 것이라 우리가 그 길로 행하리라 하리니 이는 율법이 시온에서부터 나올 것이요 여호와의 말씀이 예루살렘에서부터 나올 것임이니라 4 그가 열방 사이에 판단하시며 많은 백성을 판결하시리니 무리가 그들의 칼을 쳐서 보습을 만들고 그들의 창을 쳐서 낫을 만들 것이며 이 나라와 저 나라가 다시는 칼을 들고 서로 치지 아니하며 다시는 전쟁을 연습하지 아니하리라 5 야곱 족속아 오라 우리가 여호와의 빛에 행하자"],
 ["시편 130:5–6","쇼메림(파수꾼)","파수꾼은 아침이 올 것을 알기에 어둠을 견딥니다. 기다림은 수동이 아니라 깨어 있음입니다.","지금 내 삶에서 ‘아침을 기다리는’ 자리는 어디인가요?",""],
@@ -109,6 +107,7 @@ const D = [
 ["누가복음 2:1–7","카탈뤼마(객실)","‘여관에 방이 없었다’는 말은 손님방이 없었다는 뜻일 수 있습니다. 구유는 가장 낮은 자리의 환대입니다.","내 마음의 ‘객실’은 누구에게 열려 있나요?",""],
 ["누가복음 2:8–20","","첫 소식은 밤을 지키던 목자들에게 갑니다. 성탄은 ‘너희를 위한 구주’의 선포입니다.","오늘 이 기쁜 소식을 누구에게 전할까요?",""]
 ];
+
 // ===== 상태 =====
 const KEY = "advent2026";
 let S = {done:{},notes:{}};
@@ -126,7 +125,6 @@ const unlocked = i => preview || i <= cur();
 
 function render(){
   const c = cur(), i = sel, w = wkOf(i), d = D[i];
-  // 촛불
   const st = x => x>=26?4:wkOf(x);
   $("candles").innerHTML = [0,1,2,3,4].map(k => `<div class="c c${k+1}${((preview?st(i):st(Math.min(c,26)))>=k && (c>=0||preview))?" on":""}"></div>`).join("");
   $("wk").textContent = i===26 ? "성탄절 · 임마누엘" : `대림 ${WEEKS[w][0]} · ${WEEKS[w][1]}의 촛불`;
@@ -152,7 +150,7 @@ function render(){
   $("memo").value = S.notes[i]||"";
   $("memo").oninput = e => { S.notes[i]=e.target.value; save(); };
   $("done").onclick = () => { S.done[i]=!S.done[i]; if(!S.done[i]) delete S.done[i]; save(); render(); };
-  // 달력
+  
   const lead = START.getDay();
   let g = "";
   for(let k=0;k<lead;k++) g += "<span></span>";
@@ -165,7 +163,7 @@ function render(){
   const n = Object.keys(S.done).length;
   $("foot").textContent = `지금까지 ${n}일 묵상했습니다. 날짜가 되면 다음 말씀이 열립니다.`;
 }
-// 제목을 5번 누르면 미리보기(목회자용)
+
 $("ttl").onclick = () => { if(++taps>=5){ taps=0; preview=!preview; render(); } };
 $("share").onclick = async () => {
   const data = {title:"대림절 묵상 2026", text:"하루 한 구절, 대림절 묵상에 함께해요.", url:location.href};
@@ -176,28 +174,75 @@ $("theme").onclick = () => {
   const now = r.dataset.theme || (dark ? "dark" : "light");
   r.dataset.theme = now==="dark" ? "light" : "dark";
 };
-// 홈 화면 저장
-(function(){try{const c=document.createElement("canvas");c.width=c.height=180;const g=c.getContext("2d");g.fillStyle="#14102b";g.fillRect(0,0,180,180);g.fillStyle="#6b4aa8";g.fillRect(78,88,24,62);g.fillStyle="#e8a826";g.beginPath();g.ellipse(90,66,10,18,0,0,7);g.fill();const l=document.createElement("link");l.rel="apple-touch-icon";l.href=c.toDataURL("image/png");document.head.appendChild(l);}catch(e){}})();
+
+// 홈 화면 저장 (안드로이드 자동 프롬프트 지원을 위한 매니페스트 동적 생성 포함)
+(function(){
+  try {
+    const c = document.createElement("canvas");
+    c.width = c.height = 180;
+    const g = c.getContext("2d");
+    g.fillStyle = "#14102b"; g.fillRect(0, 0, 180, 180);
+    g.fillStyle = "#6b4aa8"; g.fillRect(78, 88, 24, 62);
+    g.fillStyle = "#e8a826"; g.beginPath(); g.ellipse(90, 66, 10, 18, 0, 0, 7); g.fill();
+    const iconUrl = c.toDataURL("image/png");
+
+    const l = document.createElement("link");
+    l.rel = "apple-touch-icon";
+    l.href = iconUrl;
+    document.head.appendChild(l);
+
+    // 크롬 등 안드로이드 환경에서 바로 홈화면 추가 창이 뜨도록 돕는 웹앱 매니페스트 동적 추가
+    const manifest = {
+      name: "2026 남학교회 대림절 묵상",
+      short_name: "대림절묵상",
+      start_url: window.location.href,
+      display: "standalone",
+      background_color: "#14102b",
+      theme_color: "#14102b",
+      icons: [{ src: iconUrl, sizes: "180x180", type: "image/png" }]
+    };
+    const blob = new Blob([JSON.stringify(manifest)], {type: 'application/json'});
+    const ml = document.createElement("link");
+    ml.rel = "manifest";
+    ml.href = URL.createObjectURL(blob);
+    document.head.appendChild(ml);
+  } catch(e){}
+})();
+
 const UA = navigator.userAgent;
 const isIOS = /iPad|iPhone|iPod/.test(UA) || (navigator.platform==="MacIntel" && navigator.maxTouchPoints>1);
 const isAnd = /Android/i.test(UA), inApp = /KAKAOTALK|NAVER|FBAN|FBAV|Instagram|Line\//i.test(UA);
 const standalone = matchMedia("(display-mode: standalone)").matches || navigator.standalone;
 let dp = null;
+
 addEventListener("beforeinstallprompt", e => { e.preventDefault(); dp = e; });
 if (standalone) $("a2hs").hidden = true;
+
 $("a2hs").onclick = async () => {
   const b = $("a2hsBox");
-  if (dp) { dp.prompt(); try { await dp.userChoice; } catch(e){} dp = null; return; }
+  // 1. 안드로이드 크롬 등 브라우저가 자동 설치를 지원하는 경우 바로 창 띄우기
+  if (dp) { 
+    dp.prompt(); 
+    try { await dp.userChoice; } catch(e){} 
+    dp = null; 
+    return; 
+  }
+  
+  // 2. 이미 열려있던 안내 상자가 있다면 닫기
   if (!b.hidden) { b.hidden = true; return; }
+  
+  // 3. 브라우저가 자동 창을 지원하지 않거나(아이폰, 인앱 등) 이벤트가 아직 안 잡힌 경우 안내문 표시
   let h;
-  if (inApp) h = `<b>다른 브라우저로 열어 주세요.</b><p style="margin:6px 0 0">지금은 카카오톡 등 앱 안의 브라우저라서 저장할 수 없습니다. 화면 구석의 ⋯ 또는 ⋮ 메뉴에서 ‘다른 브라우저로 열기’를 눌러 아이폰은 Safari, 안드로이드는 Chrome에서 열고 다시 눌러 주세요.</p>`;
+  if (inApp) h = `<b>다른 브라우저로 열어 주세요.</b><p style="margin:6px 0 0">지금은 카카오톡 등 앱 안의 브라우저라서 직접 저장할 수 없습니다. 화면 구석의 ⋯ 또는 ⋮ 메뉴에서 <b>‘다른 브라우저로 열기’</b>를 눌러 아이폰은 Safari, 안드로이는 Chrome에서 열고 다시 눌러 주세요.</p>`;
   else if (isIOS) h = `<b>아이폰에서 저장하기 (Safari)</b><ol style="margin:6px 0 0;padding-left:1.2em"><li>화면 아래(또는 위)의 <b>공유 버튼</b>(□에 ↑ 화살표)을 누릅니다.</li><li><b>‘홈 화면에 추가’</b>를 고릅니다.</li><li>오른쪽 위 <b>‘추가’</b>를 누르면 아이콘이 생깁니다.</li></ol>`;
   else if (isAnd) h = `<b>안드로이드에서 저장하기 (Chrome)</b><ol style="margin:6px 0 0;padding-left:1.2em"><li>오른쪽 위 <b>⋮ 메뉴</b>를 누릅니다.</li><li><b>‘홈 화면에 추가’</b> 또는 <b>‘앱 설치’</b>를 고릅니다.</li><li><b>‘추가’</b>를 누르면 아이콘이 생깁니다.</li></ol>`;
   else h = `<b>스마트폰에서 열어 주세요.</b><p style="margin:6px 0 0">이 주소를 아이폰(Safari) 또는 안드로이드(Chrome)로 열고 다시 눌러 주세요.</p>`;
+  
   b.innerHTML = h;
   b.hidden = false;
   b.scrollIntoView({behavior:"smooth",block:"nearest"});
 };
+
 render();
 </script>
 </body>
