@@ -164,7 +164,7 @@ function render(){
   $("foot").textContent = `지금까지 ${n}일 묵상했습니다. 날짜가 되면 다음 말씀이 열립니다.`;
 }
 
-$("ttl").onclick = () => { if(++taps>=5){ taps=0; preview=!preview; render(); } };
+$("ttl").onclick = () => { if(++taps>=7){ taps=0; preview=!preview; render(); } };
 $("share").onclick = async () => {
   const data = {title:"대림절 묵상 2026", text:"하루 한 구절, 대림절 묵상에 함께해요.", url:location.href};
   try { if(navigator.share){ await navigator.share(data); } else { await navigator.clipboard.writeText(location.href); $("foot").textContent="주소를 복사했습니다."; } } catch(e){}
