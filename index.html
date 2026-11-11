@@ -58,12 +58,17 @@ button{font:inherit;cursor:pointer}
 .row{display:flex;gap:8px;margin-top:14px}
 .row button{flex:1;padding:10px;border-radius:10px;border:1px solid var(--ln);background:var(--card);color:var(--tx);font-size:.9rem}
 .banner{background:var(--card);border:1px dashed var(--ac);border-radius:12px;padding:12px 14px;margin-bottom:14px;text-align:center;font-size:.92rem}
+.logo-box { text-align: center; margin: 16px 0 8px; }
+.logo-box img { max-width: 150px; height: auto; border-radius: 0%; object-fit: cover; }
 </style>
 </head>
 <body>
 <main>
 <h1 id="ttl">2026 남학교회 대림절 묵상</h1>
 <p class="sub">11월 29일 – 12월 25일 · 하루 한 구절</p>
+<div class="logo-box">
+<img src="logo.png" alt="교회 로고">
+</div>
 <div class="candles" id="candles" aria-hidden="true"></div>
 <div class="wk" id="wk"></div>
 <div id="banner"></div>
